@@ -2,32 +2,11 @@
 import React, { useState } from "react";
 import Loading from "./Loading";
 import Button from "@mui/material/Button";
-import { getPlaylists, getTopTracks } from "../api/spotify";
+import { getPlaylists } from "../api/spotify";
 import { authenticatedAxios } from "../api/auth";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(false);
-
-  async function tracks() {
-    try {
-      setLoading(true);
-      const responses = await Promise.all([
-        getTopTracks("short_term"),
-        getTopTracks("medium_term"),
-        getTopTracks("long_term"),
-      ]);
-      const responseData = responses.map(({ data }) =>
-        data.items.map((item) => ({
-          name: item.name,
-          artists: item.artists.map((artist) => artist.name),
-        }))
-      );
-      console.log(responseData);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   async function playlists() {
     try {
@@ -66,7 +45,7 @@ export default function Dashboard() {
         <Loading />
       ) : (
         <div className="flex gap-4 my-4">
-          <Button variant="contained" onClick={tracks}>
+          <Button variant="contained" href="/dashboard/songs">
             Tracks
           </Button>
           <Button variant="contained" onClick={playlists}>
